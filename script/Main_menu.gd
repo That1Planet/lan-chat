@@ -24,7 +24,7 @@ func _on_button_2_pressed() -> void:
 
 ##SETTINGS
 func _on_button_3_pressed() -> void:
-	pass # Replace with function body.
+	$Settings.visible = true
 
 ##Quit
 func _on_button_4_pressed() -> void:
@@ -35,3 +35,15 @@ func _on_button_5_pressed() -> void:
 	$Panel3.visible = !$Panel3.visible
 	await LanHandler.start_client_discovery()
 	LanHandler.restart_client_discovery()
+
+
+func _on_back_pressed() -> void:
+	$Settings.visible = false
+
+
+func _on_token_text_submitted(new_text: String) -> void:
+	Global.DiscordToken = new_text
+
+
+func _on_channel_id_text_submitted(new_text: String) -> void:
+	Global.DiscordChannelID = new_text

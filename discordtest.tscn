@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://butsg8veggryq"]
+
+[ext_resource type="Script" uid="uid://miw6dsd1ghlf" path="res://script/discord.gd" id="1_0dneg"]
+[ext_resource type="Script" uid="uid://dqss6smw7w8nh" path="res://addons/discord_gd/discord.gd" id="2_7q3or"]
+
+[node name="Node2D" type="Node2D" unique_id=1275142747]
+script = ExtResource("1_0dneg")
+
+[node name="DiscordBot" type="Node" parent="." unique_id=798901145]
+script = ExtResource("2_7q3or")
+metadata/_custom_type_script = "uid://dqss6smw7w8nh"
