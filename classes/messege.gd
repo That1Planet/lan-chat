@@ -33,7 +33,6 @@ func _ready() -> void:
 	name_display.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_display.text = user + " [color=#808080]" + str(format_message_time(time)) + "[/color]"
 	add_child(name_display)
-	
 	var current_y = 30.0
 	var text_to_display
 	if filetype == "string":

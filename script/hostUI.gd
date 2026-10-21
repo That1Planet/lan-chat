@@ -10,10 +10,10 @@ func _ready():
 	await get_tree().process_frame
 	$"Text Boxes/IPAddress".text = str(ipv4s).remove_chars('"[]')
 	$"Text Boxes/Username".text = Global.current_client.user
+	
 
 func _process(delta: float) -> void:
 	LanHandler.handle_server_broadcasting(delta)
-	
 func get_all_ipv4() -> Array:
 	for address in IP.get_local_addresses():
 		if address.is_valid_ip_address() and address.find(":") == -1 and not address.begins_with("127.") and not address.begins_with("169."):
@@ -103,3 +103,10 @@ func _on_line_edit_text_submitted(new_text: String) -> void:
 
 func _on_line_edit_2_text_submitted(new_text: String) -> void:
 	LanHandler.server_description = new_text
+
+
+func _on_username_text_submitted(new_text: String) -> void:
+	Global.current_client.user = new_text
+	LanHandler.client_info.set("name", new_text)
+	LanHandler.refresh_client_list()
+	$"Text Boxes/Username".text = new_text

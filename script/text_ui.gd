@@ -137,7 +137,7 @@ func _on_message_received(metadata : Dictionary, content) -> void:
 @warning_ignore("unused_parameter")
 func save_message(message,metadata):
 	pass
-
+## [time] User | filetype |  currentImageHeight | filetypetwo | content | duelmessage
 
 @warning_ignore("unused_parameter")
 func _on_line_edit_text_submitted(new_text: String) -> void:

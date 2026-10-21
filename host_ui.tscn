@@ -46,13 +46,14 @@ bbcode_enabled = true
 text = "[b][wave][rainbow freq=1 sat=0.9 val=0.9 speed=0.1] You are the host"
 scroll_active = false
 
-[node name="Username" type="RichTextLabel" parent="Text Boxes" unique_id=71556992]
-layout_mode = 0
-offset_top = 24.0
-offset_right = 365.0
-offset_bottom = 64.0
-bbcode_enabled = true
-text = "Username:"
+[node name="Username" type="LineEdit" parent="Text Boxes" unique_id=989876752]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.675
+anchor_right = 6.425
+anchor_bottom = 1.45
+offset_left = -2.0
+placeholder_text = "Username: "
 
 [node name="IPAddress" type="RichTextLabel" parent="Text Boxes" unique_id=735352265]
 layout_mode = 0
@@ -135,6 +136,7 @@ offset_top = 1.0
 offset_right = -283.0
 offset_bottom = 1.0
 
+[connection signal="text_submitted" from="Text Boxes/Username" to="." method="_on_username_text_submitted"]
 [connection signal="toggled" from="VBoxContainer/ServerDiscovery" to="." method="_on_discovery_toggle_toggled"]
 [connection signal="text_submitted" from="VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="text_submitted" from="VBoxContainer/LineEdit2" to="." method="_on_line_edit_2_text_submitted"]

@@ -29,13 +29,11 @@ func _open_console() -> void:
 	text = ""          # clear previous text
 	visible = true     # show console
 	grab_focus()       # capture keyboard input so player stops moving
-	get_tree().paused = true  # pause the game so player doesn't move while typing
 
 
 func _close_console() -> void:
 	visible = false    # hide console
 	release_focus()    # release keyboard input
-	get_tree().paused = false # unpause the game
 
 
 # Called when Enter is pressed
