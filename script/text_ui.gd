@@ -1,5 +1,5 @@
 extends Control
-
+@onready var discord = preload("uid://butsg8veggryq")
 # Node references based on standard chat layout structure
 @onready var message_container: VBoxContainer = $ScrollContainer/VBoxContainer
 @onready var message_input: LineEdit = $LineEdit
@@ -15,6 +15,15 @@ func _ready() -> void:
 	# 1. Connect to Global's signal to listen for incoming messages from any peer or the host[cite: 1]
 	Global.message_received.connect(_on_message_received)
 	get_window().files_dropped.connect(file_dropped)
+	var discord_bot = $DiscordBot
+	discord_bot.TOKEN = Global.DiscordToken 
+	discord_bot.login()
+	discord_bot.bot_ready.connect(_on_DiscordBot_bot_ready)
+	discord_bot.message_create.connect(_on_DiscordBot_message_create)
+	
+func _on_DiscordBot_bot_ready(bot: DiscordBot):
+	print("Logged in as %s#%s" % [bot.user.username, bot.user.discriminator])
+	print("Listening on %d channels and %d guilds." % [bot.channels.size(), bot.guilds.size()])
 
 ## Sends the message to all clients and the host via the Global script RPC[cite: 1]
 func send_message() -> void:
@@ -47,7 +56,8 @@ func send_message() -> void:
 	else:
 		# Call Global RPC to broadcast the message to all connected peers and host
 		Global.rpc("new_message",payload, text_content)
-	
+		$DiscordBot.send(Global.DiscordChannelID, payload["username"]+ ": " + text_content)
+
 	# Clear the input box after sending
 	message_input.clear()
 
@@ -150,3 +160,19 @@ func _on_button_pressed() -> void:
 
 func _on_v_slider_value_changed(value: float) -> void:
 	current_image_height = value
+	
+func _on_DiscordBot_message_create(bot: DiscordBot, msg: Message, channel: Dictionary):
+	print("New message from %s: %s" % [msg.author.username, msg.content])
+
+	if msg.author.bot:
+		return
+	var payload = {
+		"username" : msg.author.username,
+		"timeutc" : Time.get_unix_time_from_system(),
+		"filetype" : filetype,
+		"current_image_height" : current_image_height,
+		"duelmessage" : "",
+		"filetype2" : ""
+	}
+	print(msg.content + str(msg.message_reference))
+	Global.rpc("new_message",payload, msg.content)

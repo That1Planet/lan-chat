@@ -25,6 +25,10 @@ LanHandler="*uid://4enlfa323umt"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godiscord/plugin.cfg")
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
