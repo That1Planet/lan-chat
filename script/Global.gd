@@ -2,8 +2,6 @@ extends Node
 
 
 ## Node refrencing 
-var DiscordChannelID 
-var DiscordToken
 var HostUI
 var ClientUI 
 

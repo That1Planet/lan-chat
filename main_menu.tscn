@@ -142,40 +142,6 @@ offset_right = -0.07801819
 offset_bottom = -1.0
 text = "Start Search/Restart"
 
-[node name="Settings" type="Panel" parent="." unique_id=858684015]
-visible = false
-layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 716.0
-
-[node name="Back" type="Button" parent="Settings" unique_id=678844801]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -58.0
-offset_top = -95.0
-offset_right = 58.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "Back"
-
-[node name="token" type="LineEdit" parent="Settings" unique_id=1831923504]
-layout_mode = 0
-offset_right = 267.0
-offset_bottom = 85.0
-placeholder_text = "Discord Bot Token"
-
-[node name="Channel ID" type="LineEdit" parent="Settings" unique_id=466933814]
-layout_mode = 0
-offset_left = -3.0
-offset_top = 87.0
-offset_right = 271.0
-offset_bottom = 176.0
-placeholder_text = "Discord Channel ID"
-
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button5" to="." method="_on_button_5_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_button_2_pressed"]
@@ -183,6 +149,3 @@ placeholder_text = "Discord Channel ID"
 [connection signal="pressed" from="VBoxContainer/Button4" to="." method="_on_button_4_pressed"]
 [connection signal="text_changed" from="Panel2/TextEdit2" to="Panel3" method="_on_text_edit_2_text_changed"]
 [connection signal="pressed" from="Panel3/Button" to="Panel3" method="_on_button_pressed"]
-[connection signal="pressed" from="Settings/Back" to="." method="_on_back_pressed"]
-[connection signal="text_submitted" from="Settings/token" to="." method="_on_token_text_submitted"]
-[connection signal="text_submitted" from="Settings/Channel ID" to="." method="_on_channel_id_text_submitted"]
