@@ -124,11 +124,6 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 text = "Kick All"
 
-[node name="SaveChatLog" type="Button" parent="VBoxContainer" unique_id=289655600]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-text = "Save Chat Log"
-
 [node name="LoadChat" type="Button" parent="VBoxContainer" unique_id=923377615]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
@@ -149,5 +144,4 @@ offset_bottom = 1.0
 [connection signal="pressed" from="VBoxContainer/ResetServer" to="." method="_on_reset_server_pressed"]
 [connection signal="pressed" from="VBoxContainer/RefreshList" to="." method="_on_refresh_list_pressed"]
 [connection signal="pressed" from="VBoxContainer/KickAll" to="." method="_on_kick_all_pressed"]
-[connection signal="pressed" from="VBoxContainer/SaveChatLog" to="." method="_on_save_text_log_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoadChat" to="." method="_on_load_chat_pressed"]
