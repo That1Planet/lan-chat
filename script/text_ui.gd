@@ -104,7 +104,7 @@ func load_image_from_buffer(buffer, filetype):
 		print("IMAGE FAILED TO LOAD FROM BUFFER")
 
 ## Receives broadcasted messages from Global, instantiates the msg class, and populates data[cite: 1, 6]
-func _on_message_received(metadata : Dictionary, content) -> void:
+func _on_message_received(metadata : Dictionary, content, no_save = false) -> void:
 	var username = metadata.get("username")
 		
 	# Instantiate the msg class script
@@ -112,6 +112,7 @@ func _on_message_received(metadata : Dictionary, content) -> void:
 	new_message.user = username
 	#if timestamp != Time.get_unix_time_from_system():
 		#pass
+	new_message.time = metadata.get("timeutc", Time.get_unix_time_from_system())
 	var filetype = metadata.get("filetype")
 	if filetype != null and filetype != "string":
 		new_message.filetype = metadata["filetype"]
@@ -126,7 +127,8 @@ func _on_message_received(metadata : Dictionary, content) -> void:
 	
 	if message_container:
 		message_container.add_child(new_message)
-		save_message(content,metadata)
+		if not no_save:
+			save_message(content,metadata)
 		# Auto-scroll to the bottom of the chat window
 		await get_tree().process_frame
 		var scroll = $ScrollContainer as ScrollContainer
@@ -137,9 +139,10 @@ func _on_message_received(metadata : Dictionary, content) -> void:
 
 @warning_ignore("unused_parameter")
 func save_message(message,metadata):
-	## [time] User | filetype |  currentImageHeight | filetypetwo | content | duelmessage
 	var filetype_val = metadata.get("filetype", "string")
 	
+	if filetype_val == null or filetype_val == "":
+		filetype_val = "string"
 	var log_entry = {
 		"username": metadata.get("username", "USER"),
 		"timeutc": metadata.get("timeutc", Time.get_unix_time_from_system()),
@@ -212,7 +215,9 @@ func load_and_display_history() -> void:
 		
 		var content_to_pass = null
 		var filetype_val = entry.get("filetype")
-		
+		if filetype_val == null or filetype_val == "":
+			filetype_val = "string"
+			
 		if filetype_val != "string":
 			# Read the saved image file back into a PackedByteArray buffer
 			var path = entry.get("content_path")
@@ -225,7 +230,7 @@ func load_and_display_history() -> void:
 			
 		# Re-populate the message into your chat container using your existing receiver function
 		if content_to_pass != null:
-			_on_message_received(metadata, content_to_pass)
+			_on_message_received(metadata, content_to_pass, true)
 
 func save_file_to_downloads(file,metadata):
 	pass
