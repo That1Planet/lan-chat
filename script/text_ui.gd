@@ -136,8 +136,20 @@ func _on_message_received(metadata : Dictionary, content) -> void:
 
 @warning_ignore("unused_parameter")
 func save_message(message,metadata):
-	pass
-## [time] User | filetype |  currentImageHeight | filetypetwo | content | duelmessage
+	## [time] User | filetype |  currentImageHeight | filetypetwo | content | duelmessage
+	var data_to_save = {}
+	var filetype = metadata.get("filetype")
+	if filetype != null and filetype != "string":
+		data_to_save.filetype = metadata["filetype"]
+		data_to_save.image_size = metadata["current_image_height"]
+		data_to_save.content = message
+		data_to_save.extcontent = metadata.get("duelmessage")
+		data_to_save.exfiletype = metadata.get("filetype2")
+	else:
+		data_to_save.content = str(message)
+		data_to_save.filetype = "string"
+		data_to_save.extcontent = ""
+
 
 @warning_ignore("unused_parameter")
 func _on_line_edit_text_submitted(new_text: String) -> void:
