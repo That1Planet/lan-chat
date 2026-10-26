@@ -9,6 +9,8 @@ var currently_loaded_file = null
 var filetype = null
 var current_image_height = 100
 
+const LOG_FILE_PATH = "user://chat_history.json"
+
 func _ready() -> void:
 	$ScrollContainer/VBoxContainer.custom_minimum_size.x = $ScrollContainer.size.x
 	$Panel2.visible = false
@@ -104,7 +106,6 @@ func load_image_from_buffer(buffer, filetype):
 ## Receives broadcasted messages from Global, instantiates the msg class, and populates data[cite: 1, 6]
 func _on_message_received(metadata : Dictionary, content) -> void:
 	var username = metadata.get("username")
-	
 		
 	# Instantiate the msg class script
 	var new_message = msg.new()
@@ -125,7 +126,7 @@ func _on_message_received(metadata : Dictionary, content) -> void:
 	
 	if message_container:
 		message_container.add_child(new_message)
-		
+		save_message(content,metadata)
 		# Auto-scroll to the bottom of the chat window
 		await get_tree().process_frame
 		var scroll = $ScrollContainer as ScrollContainer
@@ -137,19 +138,97 @@ func _on_message_received(metadata : Dictionary, content) -> void:
 @warning_ignore("unused_parameter")
 func save_message(message,metadata):
 	## [time] User | filetype |  currentImageHeight | filetypetwo | content | duelmessage
-	var data_to_save = {}
-	var filetype = metadata.get("filetype")
-	if filetype != null and filetype != "string":
-		data_to_save.filetype = metadata["filetype"]
-		data_to_save.image_size = metadata["current_image_height"]
-		data_to_save.content = message
-		data_to_save.extcontent = metadata.get("duelmessage")
-		data_to_save.exfiletype = metadata.get("filetype2")
+	var filetype_val = metadata.get("filetype", "string")
+	
+	var log_entry = {
+		"username": metadata.get("username", "USER"),
+		"timeutc": metadata.get("timeutc", Time.get_unix_time_from_system()),
+		"filetype": filetype_val,
+		"current_image_height": metadata.get("current_image_height", 100),
+		"duelmessage": metadata.get("duelmessage", ""),
+		"filetype2": metadata.get("filetype2", ""),
+		"content": "",
+		"content_path": ""
+	}
+	
+	# checks if image then saves it as a file
+	if filetype_val != null and filetype_val != "string":
+		var filename = "user://img_" + str(log_entry["timeutc"]) + "." + filetype_val
+		var img_file = FileAccess.open(filename, FileAccess.WRITE)
+		if img_file:
+			img_file.store_buffer(message)
+			img_file.close()
+		log_entry["content_path"] = filename
 	else:
-		data_to_save.content = str(message)
-		data_to_save.filetype = "string"
-		data_to_save.extcontent = ""
+		log_entry["content"] = str(message)
+		
+	var history = load_chat_log_data()
+	history.append(log_entry)
+	
+	var file = FileAccess.open(LOG_FILE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(history, "\t"))
+		file.close()
+		print("Chat message logged successfully.")
 
+## read json
+func load_chat_log_data() -> Array:
+	if not FileAccess.file_exists(LOG_FILE_PATH):
+		return []
+		
+	var file = FileAccess.open(LOG_FILE_PATH, FileAccess.READ)
+	if not file:
+		return []
+		
+	var json_str = file.get_as_text()
+	file.close()
+	
+	var json = JSON.new()
+	if json.parse(json_str) == OK:
+		var data = json.get_data()
+		if data is Array:
+			return data
+			
+	return []
+
+## Call this function when you want to load and restore the chat history into your UI
+func load_and_display_history() -> void:
+	var history = load_chat_log_data()
+	if history.is_empty():
+		print("No saved chat log found.")
+		return
+		
+	print("Loading %d saved messages..." % history.size())
+	
+	for entry in history:
+		var metadata = {
+			"username": entry.get("username"),
+			"timeutc": entry.get("timeutc"),
+			"filetype": entry.get("filetype"),
+			"current_image_height": entry.get("current_image_height"),
+			"duelmessage": entry.get("duelmessage"),
+			"filetype2": entry.get("filetype2")
+		}
+		
+		var content_to_pass = null
+		var filetype_val = entry.get("filetype")
+		
+		if filetype_val != "string":
+			# Read the saved image file back into a PackedByteArray buffer
+			var path = entry.get("content_path")
+			if FileAccess.file_exists(path):
+				var img_file = FileAccess.open(path, FileAccess.READ)
+				content_to_pass = img_file.get_buffer(img_file.get_length())
+				img_file.close()
+		else:
+			content_to_pass = entry.get("content")
+			
+		# Re-populate the message into your chat container using your existing receiver function
+		if content_to_pass != null:
+			_on_message_received(metadata, content_to_pass)
+
+func save_file_to_downloads(file,metadata):
+	pass
 
 @warning_ignore("unused_parameter")
 func _on_line_edit_text_submitted(new_text: String) -> void:

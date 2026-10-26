@@ -92,6 +92,9 @@ func _on_kick_all_pressed() -> void:
 func _on_save_text_log_pressed() -> void:
 	pass # Replace with function body.
 
+func _on_load_chat_pressed() -> void:
+	$TextUI.load_and_display_history()
+
 
 func _on_reset_server_pressed() -> void:
 	LanHandler.restart_server()
