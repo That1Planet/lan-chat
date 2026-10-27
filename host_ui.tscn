@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://vy5wfn21d3pp" path="res://script/hostUI.gd" id="1_bxxqf"]
 [ext_resource type="PackedScene" uid="uid://ocp7kpg64ne0" path="res://text_ui.tscn" id="2_75ep8"]
 [ext_resource type="Script" uid="uid://btimu8i4fuwab" path="res://script/cmd.gd" id="2_vup7s"]
+[ext_resource type="PackedScene" uid="uid://ciymgb1y5dbeq" path="res://server_settings.tscn" id="4_neelp"]
 
 [node name="HostUI" type="Control" unique_id=190145693]
 layout_mode = 3
@@ -140,6 +141,18 @@ offset_left = 297.0
 offset_top = 1.0
 offset_right = -283.0
 offset_bottom = 1.0
+
+[node name="ServerSettings" parent="." unique_id=1011002844 instance=ExtResource("4_neelp")]
+visible = false
+layout_mode = 1
+anchor_left = 0.246
+anchor_top = 0.024
+anchor_right = 0.59800005
+anchor_bottom = 0.78700006
+offset_left = 0.11999512
+offset_top = -0.2800007
+offset_right = -0.44006348
+offset_bottom = 0.35998535
 
 [connection signal="text_submitted" from="Text Boxes/Username" to="." method="_on_username_text_submitted"]
 [connection signal="toggled" from="VBoxContainer/ServerDiscovery" to="." method="_on_discovery_toggle_toggled"]
