@@ -11,3 +11,7 @@ this is made using godot because thats all i really know how to use. defenitly p
 - might need to set up a ordered history as well 
 - make the server config files set up a specific text log, loading the text history should use the correct ini and history related to it 
 - add multiple channels that can be configured from the server settings ui
+- add a ui element to display the current conneciton status (connected, out of date, disconnected)
+- BUG, if a image is too wide it will cut off, need to make it so there is a max width
+- Unload text once there is enouth, scrolling up will load them again
+- hide the ip, make it so there is a button to reveal it. 
